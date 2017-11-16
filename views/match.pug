@@ -1,0 +1,12 @@
+html
+	head
+		title found user - #{title}
+
+body
+	include nav.pug
+
+	if (firstName === undefined, lastName === undefined)
+		h1 No current search request
+	else if (firstName === firstName, lastName === lastName)
+		h1 Full name is #{firstName} #{lastName}
+		p email address #{emailAddress}

@@ -1,0 +1,13 @@
+html
+	head
+		title pug website - #{title}
+
+body
+	include nav.pug	
+
+	h2 Search by name
+	div
+		form(id='match' method='POST' action='/match')
+			input(type="text" name="firstname" placeholder="First name")
+			input(type="text" name="lastname" placeholder="Last name")
+			input(type='submit' value='search' id='add')

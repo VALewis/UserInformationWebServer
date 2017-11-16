@@ -1,0 +1,12 @@
+html
+	head
+		title pug website - #{title}
+
+body
+	include nav.pug
+
+	div
+	h2 User list
+	-for(var i=0; i < userList.length; i++)
+		li #{userList[i].firstname} #{userList[i].lastname} #{userList[i].email}
+

@@ -1,0 +1,14 @@
+html
+	head
+		title pug website - #{title}
+
+body
+	include nav.pug	
+
+	h2 Creat a new user
+	div
+		form(id='creat' method='POST' action='/create')
+			input(type="text" name="firstname" placeholder="First name")
+			input(type="text" name="lastname" placeholder="Last name")
+			input(type="text" name="email" placeholder="Email address")
+			input(type='submit' value='add' id='add')
