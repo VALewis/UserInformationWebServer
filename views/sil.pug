@@ -1,0 +1,29 @@
+       script.
+           $(document).ready(function() {
+               var lastCall = Date.now()
+               $(“#searchTerm”).keyup(function() {
+               console.log(“hi”)
+                   if (Date.now() - 300 < lastCall ) {
+                       lastCall = Date.now();
+                       console.log(“blocked”)
+                       return
+                   }
+                   lastCall = Date.now()
+                       let searchInput = {searchTerm: $(“#searchTerm”).val().toLowerCase()};
+                       $.ajax( {url:“/searchlive”,
+                           data: searchInput,
+                           type:“POST”,
+                           dataType:“json”,
+                           crossDomain: true,
+                           success:function(data, textStatus, jqXHR) {
+                           console.log(data.usermatch)
+                               $("#input1").empty()
+                                   for(var i = 0; i<data.usermatch.length; i++) {
+                                   $(“#input1”).append(“<option value=‘” + data.usermatch[i] + “’>“)
+                               }  
+                       },
+                           error: function(jqXHR, textStatus, errorThrown) {
+                           alert(“failure, user not found”, textStatus);}
+                   })              
+               })    
+        })

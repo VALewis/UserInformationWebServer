@@ -1,13 +1,108 @@
 html
 	head
+		script(src="https://code.jquery.com/jquery-3.2.1.min.js"
+			integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+			crossorigin="anonymous")
+	
 		title pug website - #{title}
 
-body
-	include nav.pug	
+	body
+		include nav.pug	
 
-	h2 Search by name
-	div
-		form(id='match' method='POST' action='/match')
-			input(type="text" name="firstname" placeholder="First name")
-			input(type="text" name="lastname" placeholder="Last name")
-			input(type='submit' value='search' id='add')
+		h2 Search by name
+			form(class='form-group' id='match' method='POST' action='/match')
+				input(type="text" list="matchRes" id='autocomplete' name="search" placeholder="Type name")
+				//- datalist(id="matchRes")
+			p Suggestion: 
+			#results
+	
+		script.
+			$(document).ready(function() { //step 1. client side: reading file, then posting the input of the client (= suggestion from inputfield) to the server side.
+				var lastCall = Date.now()
+				$("#autocomplete").keyup(function() {
+					console.log("hi")
+					if (Date.now() - 300 < lastCall ) {
+						lastCall = Date.now();
+						console.log("blocked")						
+					}
+					lastCall = Date.now()
+					let searchInput = $("#autocomplete").val().toUpperCase()
+					let searchField = {autocomplete: searchInput} // om data input naar de server side te sturen moet je de input in een object veranderen.
+					console.log(searchField)
+
+					$.post("/search", searchField, function(data) {
+						$('#results').empty();
+							for(var i = 0; i<data.usermatch.length; i++) {
+							console.log(data.usermatch)
+							$('#results').append(`<p> ${data.usermatch[i].firstname} ${data.usermatch[i].lastname} </p>`)
+							} 
+							//- $("#matchRes").append("<option value='" + data.usermatch[i] + "'>")
+							//- }
+					})
+
+
+											
+					//- $.ajax({url: '/search', 
+					//- 	type: "POST",
+					//- 	dataType: "json",
+					//- 	data: searchField, // dit is de data die je van de client-side naar de server side stuurt, ALTIJD specificeren!!
+					//- 	success: function(data, textStatus, jqXHR) {
+					//- 	console.log(data.usermatch)
+					//- 		$('#results').empty()
+					//- 		for(var i = 0; i<data.usermatch.length; i++) {
+					//- 			$('#results').append("<option value='" + data.usermatch[i] + "'>")
+					//- 			}  
+					//- 	},
+					//- 	error: function(jqXHR, textStatus, errorThrown) {
+					//- 				console.log("error")
+					//- 				alert("failure, name not found")
+					//- 	}
+					//- })						
+				})
+			})
+			
+
+
+
+
+
+	//- 
+	//- method
+	//- data
+	//- callback function to handle response of server
+
+	//- $.post("url", dataYoureSending, function(data, err) {
+		console.log(data)
+	//- })
+
+	//- dataYoureSending should always be an object type
+	//- {someKey: someValue}
+
+
+
+			//- $(document).ready(function() { 
+			//- 	$("#search").autocomplete({
+			//- 		source: function(req, res) {
+			//- 			$.getJSON("localhost:3000", function(data) {
+			//- 				res($.map(data, function (val, key) {
+			//- 						return {
+			//- 						firstname: req.body.firstname,
+			//- 						lastname: req.body.lastname
+			//- 						};
+			//- 				}));
+			//- 			});
+			//- 		};
+						minLength: 2,
+						requestDelay: 200
+			//- 	})
+			//- })
+
+
+
+
+
+
+			
+
+
+			
